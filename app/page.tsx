@@ -151,7 +151,7 @@ function DashboardContent() {
   }).filter((g) => g.items.length > 0);
 
   return (
-    <div className="p-8">
+    <div className="p-4 md:p-8">
       {modalOpen && <AddCompanyModal onClose={() => setModalOpen(false)} />}
 
       <div className="flex items-center justify-between mb-8">

@@ -30,7 +30,7 @@ export default function CompanyDetail() {
   };
 
   return (
-    <div className="p-8 max-w-3xl mx-auto">
+    <div className="p-4 md:p-8 max-w-3xl mx-auto">
       {editOpen && <EditCompanyModal company={company} onClose={() => setEditOpen(false)} />}
 
       <button

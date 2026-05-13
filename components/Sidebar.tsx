@@ -35,7 +35,7 @@ export default function Sidebar() {
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
-    <aside className="fixed left-0 top-0 h-screen w-60 bg-slate-900 flex flex-col z-10">
+    <aside className="hidden md:flex fixed left-0 top-0 h-screen w-60 bg-slate-900 flex-col z-10">
       <div className="px-6 py-6 border-b border-slate-800">
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-lg bg-indigo-500 flex items-center justify-center shrink-0">

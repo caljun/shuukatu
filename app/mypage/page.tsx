@@ -10,7 +10,7 @@ export default function MyPage() {
   const [tab, setTab] = useState<Tab>("resume");
 
   return (
-    <div className="p-8 max-w-3xl mx-auto">
+    <div className="p-4 md:p-8 max-w-3xl mx-auto">
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-slate-800">マイページ</h1>
       </div>
