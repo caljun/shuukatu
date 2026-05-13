@@ -61,9 +61,9 @@ function SortableCard({ company, onClick }: { company: Company; onClick: () => v
 
       <button
         onClick={onClick}
-        className="group w-full text-left bg-white rounded-2xl p-5 border border-slate-200/60 hover:border-indigo-300 hover:shadow-lg hover:shadow-indigo-100/50 transition-all duration-200 active:scale-[0.99]"
+        className="group w-full text-center bg-white rounded-2xl p-5 border border-slate-200/60 hover:border-indigo-300 hover:shadow-lg hover:shadow-indigo-100/50 transition-all duration-200 active:scale-[0.99]"
       >
-        <div className="flex items-center justify-between mb-3 pr-6">
+        <div className="flex items-center justify-center gap-2 mb-3 pr-4">
           <h2 className="font-bold text-slate-800 text-lg leading-snug group-hover:text-indigo-700 transition-colors">
             {company.name}
           </h2>
@@ -74,12 +74,23 @@ function SortableCard({ company, onClick }: { company: Company; onClick: () => v
           )}
         </div>
 
-        <div className="flex justify-end mt-2">
-          <span className="text-slate-300 group-hover:text-indigo-400 transition-colors">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
-          </span>
+        <div className="flex flex-col items-center gap-1.5 mb-4">
+          {company.loginId && (
+            <div className="flex items-center gap-1.5 text-xs text-slate-400">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" />
+              </svg>
+              <span className="truncate">{company.loginId}</span>
+            </div>
+          )}
+          {company.mypageUrl && (
+            <div className="flex items-center gap-1.5 text-xs text-indigo-400">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" />
+              </svg>
+              <span>マイページあり</span>
+            </div>
+          )}
         </div>
       </button>
     </div>
