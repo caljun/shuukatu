@@ -196,7 +196,7 @@ function DashboardContent() {
                   onDragEnd={(e) => handleDragEnd(e, genreIds)}
                 >
                   <SortableContext items={genreIds} strategy={verticalListSortingStrategy}>
-                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-2 xl:grid-cols-3 gap-4">
                       {items.map((company) => (
                         <SortableCard
                           key={company.id}
