@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import "./globals.css";
 import { CompaniesProvider } from "@/context/CompaniesContext";
+import { EventsProvider } from "@/context/EventsContext";
 import AppShell from "@/components/AppShell";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 
@@ -35,7 +36,9 @@ export default function RootLayout({
       <body className="h-full">
         <ServiceWorkerRegistration />
         <CompaniesProvider>
-          <AppShell>{children}</AppShell>
+          <EventsProvider>
+            <AppShell>{children}</AppShell>
+          </EventsProvider>
         </CompaniesProvider>
       </body>
     </html>

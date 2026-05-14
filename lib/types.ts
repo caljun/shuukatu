@@ -10,3 +10,10 @@ export interface Company {
   loginId: string;
   unread: number;
 }
+
+export interface CompanyEvent {
+  id: string;
+  companyId: string;
+  date: string; // YYYY-MM-DD
+  title: string;
+}
