@@ -132,23 +132,23 @@ export default function CompanyDetail() {
         企業一覧へ戻る
       </button>
 
-      <div className="bg-white rounded-2xl border border-slate-200/60 p-6 mb-4">
-        <div className="flex items-start justify-between">
-          <h1 className="text-3xl font-bold text-slate-800">{company.name}</h1>
-          <div className="flex gap-2 ml-4 shrink-0">
+      <div className="bg-white rounded-2xl border border-slate-200/60 p-5 mb-4">
+        <div className="flex items-start justify-between gap-3">
+          <h1 className="text-xl md:text-3xl font-bold text-slate-800 leading-snug">{company.name}</h1>
+          <div className="flex gap-2 shrink-0">
             <button
               onClick={() => setEditOpen(true)}
-              className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors"
+              className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors"
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
                 <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
               </svg>
-              編集
+              <span className="hidden sm:inline">編集</span>
             </button>
             <button
               onClick={handleDelete}
-              className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-red-500 border border-red-200 rounded-xl hover:bg-red-50 transition-colors"
+              className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-red-500 border border-red-200 rounded-xl hover:bg-red-50 transition-colors"
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="3 6 5 6 21 6" />
@@ -156,7 +156,7 @@ export default function CompanyDetail() {
                 <path d="M10 11v6M14 11v6" />
                 <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
               </svg>
-              削除
+              <span className="hidden sm:inline">削除</span>
             </button>
           </div>
         </div>
@@ -203,25 +203,27 @@ export default function CompanyDetail() {
       <div className="bg-white rounded-2xl border border-slate-200/60 p-5">
         <p className="text-xs font-medium text-slate-400 uppercase tracking-wider mb-4">予定</p>
 
-        <div className="flex gap-2 mb-4">
-          <input
-            type="date"
-            value={newDate}
-            onChange={(e) => setNewDate(e.target.value)}
-            className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition-all"
-          />
-          <input
-            type="text"
-            value={newTitle}
-            onChange={(e) => setNewTitle(e.target.value)}
-            onKeyDown={(e) => { if (e.key === "Enter" && !e.nativeEvent.isComposing) handleAddEvent(); }}
-            placeholder="予定を入力"
-            className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition-all"
-          />
+        <div className="flex flex-col gap-2 mb-4">
+          <div className="flex gap-2">
+            <input
+              type="date"
+              value={newDate}
+              onChange={(e) => setNewDate(e.target.value)}
+              className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition-all"
+            />
+            <input
+              type="text"
+              value={newTitle}
+              onChange={(e) => setNewTitle(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter" && !e.nativeEvent.isComposing) handleAddEvent(); }}
+              placeholder="予定を入力"
+              className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition-all"
+            />
+          </div>
           <button
             onClick={handleAddEvent}
             disabled={adding || !newDate || !newTitle.trim()}
-            className="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-xl hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="w-full py-2 bg-indigo-600 text-white text-sm font-medium rounded-xl hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           >
             追加
           </button>
