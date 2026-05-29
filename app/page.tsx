@@ -50,6 +50,7 @@ function SortableCard({ company, onClick }: { company: Company; onClick: () => v
   };
 
   const colorClass = CARD_COLOR_CLASS[company.color ?? "white"];
+  const dark = company.color === "black";
 
   return (
     <div ref={setNodeRef} style={style}>
@@ -58,7 +59,7 @@ function SortableCard({ company, onClick }: { company: Company; onClick: () => v
         <div
           {...attributes}
           {...listeners}
-          className="px-3 py-4 text-slate-300 hover:text-slate-500 cursor-grab active:cursor-grabbing transition-colors shrink-0"
+          className={`px-3 py-4 cursor-grab active:cursor-grabbing transition-colors shrink-0 ${dark ? "text-slate-500 hover:text-slate-300" : "text-slate-300 hover:text-slate-500"}`}
           onClick={(e) => e.stopPropagation()}
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" strokeWidth="2">
@@ -76,11 +77,11 @@ function SortableCard({ company, onClick }: { company: Company; onClick: () => v
           onClick={onClick}
           className="group flex-1 flex items-center gap-2 py-4 text-left min-w-0"
         >
-          <span className="font-semibold text-slate-800 text-sm group-hover:text-indigo-700 transition-colors truncate">
+          <span className={`font-semibold text-sm transition-colors truncate ${dark ? "text-white group-hover:text-indigo-300" : "text-slate-800 group-hover:text-indigo-700"}`}>
             {company.name}
           </span>
           {company.loginId && (
-            <span className="text-xs text-slate-500 shrink-0 truncate max-w-[120px]">{company.loginId}</span>
+            <span className={`text-xs shrink-0 truncate max-w-[120px] ${dark ? "text-slate-400" : "text-slate-500"}`}>{company.loginId}</span>
           )}
           {company.unread > 0 && (
             <span className="bg-red-500 text-white text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center shrink-0">
@@ -96,7 +97,7 @@ function SortableCard({ company, onClick }: { company: Company; onClick: () => v
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
-            className="flex items-center gap-1.5 mr-3 px-3 py-1.5 text-xs font-medium text-indigo-600 border border-indigo-200 rounded-lg hover:bg-indigo-50 transition-colors shrink-0"
+            className={`flex items-center gap-1.5 mr-3 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors shrink-0 ${dark ? "text-indigo-300 border border-indigo-500 hover:bg-indigo-500/20" : "text-indigo-600 border border-indigo-200 hover:bg-indigo-50"}`}
           >
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" />
