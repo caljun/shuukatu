@@ -107,6 +107,17 @@ export default function CalendarPage() {
   const isToday = (day: number) =>
     today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
 
+  const isPast = (day: number) => {
+    const d = new Date(year, month, day);
+    d.setHours(0, 0, 0, 0);
+    const t = new Date(today);
+    t.setHours(0, 0, 0, 0);
+    return d < t;
+  };
+
+  const isCurrentMonth =
+    today.getFullYear() === year && today.getMonth() === month;
+
   const cells: (number | null)[] = [
     ...Array(firstDayOfWeek).fill(null),
     ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
@@ -161,7 +172,17 @@ export default function CalendarPage() {
               <path d="M15 18l-6-6 6-6" />
             </svg>
           </button>
-          <span className="text-base font-bold text-slate-800">{year}年 {month + 1}月</span>
+          <div className="flex items-center gap-3">
+            <span className="text-base font-bold text-slate-800">{year}年 {month + 1}月</span>
+            {!isCurrentMonth && (
+              <button
+                onClick={() => { setCurrentDate(new Date(today.getFullYear(), today.getMonth(), 1)); setSelectedDate(null); }}
+                className="text-xs font-medium text-indigo-600 border border-indigo-200 rounded-lg px-2.5 py-1 hover:bg-indigo-50 transition-colors"
+              >
+                今日
+              </button>
+            )}
+          </div>
           <button
             onClick={() => { setCurrentDate(new Date(year, month + 1, 1)); setSelectedDate(null); }}
             className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 text-slate-500 transition-colors"
@@ -186,6 +207,7 @@ export default function CalendarPage() {
             const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
             const dayEvents = eventsByDate[dateStr] ?? [];
             const todayFlag = isToday(day);
+            const pastFlag = isPast(day);
             const selected = selectedDate === dateStr;
             const colIndex = (firstDayOfWeek + day - 1) % 7;
 
@@ -193,7 +215,7 @@ export default function CalendarPage() {
               <button
                 key={day}
                 onClick={() => handleDayClick(dateStr)}
-                className={`flex flex-col items-center py-1.5 gap-1 rounded-xl transition-colors ${selected ? "bg-indigo-50" : "hover:bg-slate-50"}`}
+                className={`flex flex-col items-center py-1.5 gap-1 rounded-xl transition-colors ${selected ? "bg-indigo-50" : "hover:bg-slate-50"} ${pastFlag && !todayFlag ? "opacity-40" : ""}`}
               >
                 <span className={`text-sm w-7 h-7 flex items-center justify-center rounded-full font-medium transition-colors ${
                   todayFlag
