@@ -1,5 +1,5 @@
 export type Genre = "SIer" | "エンタメ" | "";
-export type CompanyColor = "white" | "blue" | "red";
+export type CompanyColor = "white" | "blue" | "red" | "purple";
 
 export interface Company {
   id: string;

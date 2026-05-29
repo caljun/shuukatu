@@ -61,9 +61,10 @@ function EditEventRow({
 }
 
 const COLOR_OPTIONS: { value: CompanyColor; label: string; swatch: string; ring: string }[] = [
-  { value: "white", label: "白", swatch: "bg-white border-2 border-slate-300", ring: "ring-slate-400" },
-  { value: "blue",  label: "青", swatch: "bg-blue-200 border-2 border-blue-300", ring: "ring-blue-500" },
-  { value: "red",   label: "赤", swatch: "bg-red-200 border-2 border-red-300",  ring: "ring-red-500"  },
+  { value: "white",  label: "白", swatch: "bg-white border-2 border-slate-300",   ring: "ring-slate-400"  },
+  { value: "blue",   label: "青", swatch: "bg-blue-200 border-2 border-blue-300", ring: "ring-blue-500"   },
+  { value: "red",    label: "赤", swatch: "bg-red-200 border-2 border-red-300",   ring: "ring-red-500"    },
+  { value: "purple", label: "紫", swatch: "bg-purple-200 border-2 border-purple-300", ring: "ring-purple-500" },
 ];
 
 interface Props {
