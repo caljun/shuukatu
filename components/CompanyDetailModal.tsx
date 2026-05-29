@@ -65,6 +65,7 @@ const COLOR_OPTIONS: { value: CompanyColor; label: string; swatch: string; ring:
   { value: "blue",   label: "青", swatch: "bg-blue-200 border-2 border-blue-300", ring: "ring-blue-500"   },
   { value: "red",    label: "赤", swatch: "bg-red-200 border-2 border-red-300",   ring: "ring-red-500"    },
   { value: "purple", label: "紫", swatch: "bg-purple-200 border-2 border-purple-300", ring: "ring-purple-500" },
+  { value: "black",  label: "黒", swatch: "bg-slate-800 border-2 border-slate-600",   ring: "ring-slate-500"  },
 ];
 
 interface Props {

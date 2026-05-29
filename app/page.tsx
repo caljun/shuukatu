@@ -35,6 +35,7 @@ const CARD_COLOR_CLASS: Record<CompanyColor, string> = {
   blue:   "bg-blue-50 border-blue-200 hover:border-blue-400 hover:shadow-blue-100/50",
   red:    "bg-red-50 border-red-200 hover:border-red-400 hover:shadow-red-100/50",
   purple: "bg-purple-50 border-purple-200 hover:border-purple-400 hover:shadow-purple-100/50",
+  black:  "bg-slate-800 border-slate-700 hover:border-slate-500 hover:shadow-slate-400/20",
 };
 
 function SortableCard({ company, onClick }: { company: Company; onClick: () => void }) {
