@@ -1,4 +1,5 @@
 export type Genre = "SIer" | "エンタメ" | "";
+export type CompanyColor = "white" | "blue" | "red";
 
 export interface Company {
   id: string;
@@ -9,6 +10,7 @@ export interface Company {
   mypageUrl: string;
   loginId: string;
   unread: number;
+  color?: CompanyColor;
 }
 
 export interface CompanyEvent {

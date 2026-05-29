@@ -20,13 +20,20 @@ import { CSS } from "@dnd-kit/utilities";
 import { useCompanies } from "@/context/CompaniesContext";
 import { useCompanyOrder } from "@/lib/useCompanyOrder";
 import AddCompanyModal from "@/components/AddCompanyModal";
-import { Company, Genre } from "@/lib/types";
+import CompanyDetailModal from "@/components/CompanyDetailModal";
+import { Company, Genre, CompanyColor } from "@/lib/types";
 
 const GENRE_ORDER: Genre[] = ["SIer", "エンタメ", ""];
 const GENRE_LABEL: Record<Genre, string> = {
   SIer: "SIer",
   エンタメ: "エンタメ",
   "": "未分類",
+};
+
+const CARD_COLOR_CLASS: Record<CompanyColor, string> = {
+  white: "bg-white border-slate-200/60 hover:border-indigo-300 hover:shadow-indigo-100/50",
+  blue:  "bg-blue-50 border-blue-200 hover:border-blue-400 hover:shadow-blue-100/50",
+  red:   "bg-red-50 border-red-200 hover:border-red-400 hover:shadow-red-100/50",
 };
 
 function SortableCard({ company, onClick }: { company: Company; onClick: () => void }) {
@@ -40,9 +47,11 @@ function SortableCard({ company, onClick }: { company: Company; onClick: () => v
     zIndex: isDragging ? 10 : undefined,
   };
 
+  const colorClass = CARD_COLOR_CLASS[company.color ?? "white"];
+
   return (
     <div ref={setNodeRef} style={style}>
-      <div className="flex items-center bg-white rounded-xl border border-slate-200/60 hover:border-indigo-300 hover:shadow-md hover:shadow-indigo-100/50 transition-all duration-200">
+      <div className={`flex items-center rounded-xl border hover:shadow-md transition-all duration-200 ${colorClass}`}>
         {/* ドラッグハンドル */}
         <div
           {...attributes}
@@ -60,7 +69,7 @@ function SortableCard({ company, onClick }: { company: Company; onClick: () => v
           </svg>
         </div>
 
-        {/* 企業名 */}
+        {/* 企業名 + ログインID */}
         <button
           onClick={onClick}
           className="group flex-1 flex items-center gap-2 py-4 text-left min-w-0"
@@ -68,6 +77,9 @@ function SortableCard({ company, onClick }: { company: Company; onClick: () => v
           <span className="font-semibold text-slate-800 text-sm group-hover:text-indigo-700 transition-colors truncate">
             {company.name}
           </span>
+          {company.loginId && (
+            <span className="text-xs text-slate-500 shrink-0 truncate max-w-[120px]">{company.loginId}</span>
+          )}
           {company.unread > 0 && (
             <span className="bg-red-500 text-white text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center shrink-0">
               {company.unread}
@@ -103,6 +115,8 @@ function DashboardContent() {
   const { companies } = useCompanies();
   const { order, saveOrder } = useCompanyOrder();
   const [modalOpen, setModalOpen] = useState(false);
+  const [detailId, setDetailId] = useState<string | null>(null);
+  const [filterGenre, setFilterGenre] = useState<Genre | "all">("all");
   const [sortedIds, setSortedIds] = useState<string[]>([]);
 
   useEffect(() => {
@@ -142,13 +156,14 @@ function DashboardContent() {
       .map((id) => companies.find((c) => c.id === id))
       .filter((c): c is Company => !!c && (c.genre ?? "") === genre);
     return { genre, label: GENRE_LABEL[genre], items };
-  }).filter((g) => g.items.length > 0);
+  }).filter((g) => g.items.length > 0 && (filterGenre === "all" || g.genre === filterGenre));
 
   return (
     <div className="p-4 md:p-8">
       {modalOpen && <AddCompanyModal onClose={() => setModalOpen(false)} />}
+      {detailId && <CompanyDetailModal companyId={detailId} onClose={() => setDetailId(null)} />}
 
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between mb-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-800">企業一覧</h1>
           <p className="text-sm text-slate-500 mt-0.5">{companies.length} 社を管理中</p>
@@ -164,6 +179,30 @@ function DashboardContent() {
         </button>
       </div>
 
+      <div className="flex gap-2 mb-6">
+        {([["all", "全体"], ["SIer", "SIer"], ["エンタメ", "エンタメ"], ["", "未分類"]] as [Genre | "all", string][]).map(([val, label]) => {
+          const count = val === "all" ? companies.length : companies.filter((c) => (c.genre ?? "") === val).length;
+          return (
+            <button
+              key={val}
+              onClick={() => setFilterGenre(val)}
+              className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-medium border transition-all ${
+                filterGenre === val
+                  ? "bg-indigo-600 text-white border-indigo-600"
+                  : "bg-white text-slate-500 border-slate-200 hover:border-slate-300 hover:text-slate-700"
+              }`}
+            >
+              {label}
+              <span className={`text-xs font-semibold rounded-full px-1.5 py-0.5 leading-none ${
+                filterGenre === val ? "bg-white/20 text-white" : "bg-slate-100 text-slate-400"
+              }`}>
+                {count}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
       {companies.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-64 text-slate-400">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="mb-4 opacity-40">
@@ -173,6 +212,21 @@ function DashboardContent() {
           <p className="text-sm">企業がありません</p>
           <p className="text-xs mt-1">「企業を追加」から登録してください</p>
         </div>
+      ) : filterGenre === "all" ? (
+        (() => {
+          const allItems = sortedIds.map((id) => companies.find((c) => c.id === id)).filter((c): c is Company => !!c);
+          return (
+            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleDragEnd(e, allItems.map((c) => c.id))}>
+              <SortableContext items={allItems.map((c) => c.id)} strategy={verticalListSortingStrategy}>
+                <div className="flex flex-col gap-2">
+                  {allItems.map((company) => (
+                    <SortableCard key={company.id} company={company} onClick={() => setDetailId(company.id)} />
+                  ))}
+                </div>
+              </SortableContext>
+            </DndContext>
+          );
+        })()
       ) : (
         <div className="flex flex-col gap-10">
           {grouped.map(({ genre, label, items }) => {
@@ -195,7 +249,7 @@ function DashboardContent() {
                         <SortableCard
                           key={company.id}
                           company={company}
-                          onClick={() => router.push(`/company/${company.id}`)}
+                          onClick={() => setDetailId(company.id)}
                         />
                       ))}
                     </div>

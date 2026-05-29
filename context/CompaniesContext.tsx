@@ -13,7 +13,7 @@ import {
   orderBy,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { Company } from "@/lib/types";
+import { Company, CompanyColor } from "@/lib/types";
 
 interface CompaniesContextType {
   companies: Company[];
@@ -22,6 +22,7 @@ interface CompaniesContextType {
   updateCompany: (id: string, data: Omit<Company, "id" | "unread">) => Promise<void>;
   deleteCompany: (id: string) => Promise<void>;
   getCompany: (id: string) => Company | undefined;
+  setCompanyColor: (id: string, color: CompanyColor) => Promise<void>;
 }
 
 const CompaniesContext = createContext<CompaniesContextType | null>(null);
@@ -59,9 +60,13 @@ export function CompaniesProvider({ children }: { children: ReactNode }) {
 
   const getCompany = (id: string) => companies.find((c) => c.id === id);
 
+  const setCompanyColor = async (id: string, color: CompanyColor) => {
+    await updateDoc(doc(db, "companies", id), { color });
+  };
+
   return (
     <CompaniesContext.Provider
-      value={{ companies, loading, addCompany, updateCompany, deleteCompany, getCompany }}
+      value={{ companies, loading, addCompany, updateCompany, deleteCompany, getCompany, setCompanyColor }}
     >
       {children}
     </CompaniesContext.Provider>
