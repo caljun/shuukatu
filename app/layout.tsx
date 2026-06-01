@@ -3,6 +3,7 @@ import { Geist } from "next/font/google";
 import "./globals.css";
 import { CompaniesProvider } from "@/context/CompaniesContext";
 import { EventsProvider } from "@/context/EventsContext";
+import { GenresProvider } from "@/context/GenresContext";
 import AppShell from "@/components/AppShell";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 
@@ -35,11 +36,13 @@ export default function RootLayout({
       </head>
       <body className="h-full">
         <ServiceWorkerRegistration />
-        <CompaniesProvider>
-          <EventsProvider>
-            <AppShell>{children}</AppShell>
-          </EventsProvider>
-        </CompaniesProvider>
+        <GenresProvider>
+          <CompaniesProvider>
+            <EventsProvider>
+              <AppShell>{children}</AppShell>
+            </EventsProvider>
+          </CompaniesProvider>
+        </GenresProvider>
       </body>
     </html>
   );

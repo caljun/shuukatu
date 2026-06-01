@@ -2,9 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useCompanies } from "@/context/CompaniesContext";
-import { Genre } from "@/lib/types";
-
-const GENRES: Genre[] = ["SIer", "エンタメ"];
+import { useGenres } from "@/context/GenresContext";
 
 interface Props {
   onClose: () => void;
@@ -12,12 +10,16 @@ interface Props {
 
 export default function AddCompanyModal({ onClose }: Props) {
   const { addCompany } = useCompanies();
+  const { genres, addGenre } = useGenres();
   const [name, setName] = useState("");
-  const [genre, setGenre] = useState<Genre>("");
+  const [genre, setGenre] = useState("");
   const [mypageUrl, setMypageUrl] = useState("");
   const [loginId, setLoginId] = useState("");
   const [error, setError] = useState("");
+  const [addingGenre, setAddingGenre] = useState(false);
+  const [newGenreName, setNewGenreName] = useState("");
   const nameRef = useRef<HTMLInputElement>(null);
+  const newGenreRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     nameRef.current?.focus();
@@ -27,6 +29,20 @@ export default function AddCompanyModal({ onClose }: Props) {
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
   }, [onClose]);
+
+  useEffect(() => {
+    if (addingGenre) newGenreRef.current?.focus();
+  }, [addingGenre]);
+
+  const handleConfirmNewGenre = () => {
+    const trimmed = newGenreName.trim();
+    if (trimmed) {
+      addGenre(trimmed);
+      setGenre(trimmed);
+    }
+    setAddingGenre(false);
+    setNewGenreName("");
+  };
 
   const handleSubmit = () => {
     if (!name.trim()) {
@@ -86,8 +102,8 @@ export default function AddCompanyModal({ onClose }: Props) {
 
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1.5">ジャンル</label>
-            <div className="flex gap-2">
-              {GENRES.map((g) => (
+            <div className="flex flex-wrap gap-2">
+              {genres.map((g) => (
                 <button
                   key={g}
                   type="button"
@@ -101,6 +117,44 @@ export default function AddCompanyModal({ onClose }: Props) {
                   {g}
                 </button>
               ))}
+              {addingGenre ? (
+                <div className="flex items-center gap-1.5">
+                  <input
+                    ref={newGenreRef}
+                    type="text"
+                    value={newGenreName}
+                    onChange={(e) => setNewGenreName(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && !e.nativeEvent.isComposing) handleConfirmNewGenre();
+                      if (e.key === "Escape") { setAddingGenre(false); setNewGenreName(""); }
+                    }}
+                    placeholder="タグ名"
+                    className="w-24 bg-slate-50 border border-indigo-300 rounded-xl px-3 py-2 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleConfirmNewGenre}
+                    className="px-3 py-2 text-sm font-medium text-white bg-indigo-600 rounded-xl hover:bg-indigo-700 transition-colors"
+                  >
+                    追加
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { setAddingGenre(false); setNewGenreName(""); }}
+                    className="px-3 py-2 text-sm font-medium text-slate-500 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors"
+                  >
+                    ✕
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setAddingGenre(true)}
+                  className="px-3 py-2 rounded-xl text-sm font-medium border border-dashed border-slate-300 text-slate-400 hover:border-indigo-400 hover:text-indigo-500 transition-all"
+                >
+                  ＋
+                </button>
+              )}
             </div>
           </div>
 

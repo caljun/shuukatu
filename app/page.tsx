@@ -18,17 +18,11 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useCompanies } from "@/context/CompaniesContext";
+import { useGenres } from "@/context/GenresContext";
 import { useCompanyOrder } from "@/lib/useCompanyOrder";
 import AddCompanyModal from "@/components/AddCompanyModal";
 import CompanyDetailModal from "@/components/CompanyDetailModal";
-import { Company, Genre, CompanyColor } from "@/lib/types";
-
-const GENRE_ORDER: Genre[] = ["SIer", "エンタメ", ""];
-const GENRE_LABEL: Record<Genre, string> = {
-  SIer: "SIer",
-  エンタメ: "エンタメ",
-  "": "未分類",
-};
+import { Company, CompanyColor } from "@/lib/types";
 
 const CARD_COLOR_CLASS: Record<CompanyColor, string> = {
   white:  "bg-white border-slate-200/60 hover:border-indigo-300 hover:shadow-indigo-100/50",
@@ -116,10 +110,11 @@ function DashboardContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { companies } = useCompanies();
+  const { genres } = useGenres();
   const { order, saveOrder } = useCompanyOrder();
   const [modalOpen, setModalOpen] = useState(false);
   const [detailId, setDetailId] = useState<string | null>(null);
-  const [filterGenre, setFilterGenre] = useState<Genre | "all">("all");
+  const [filterGenre, setFilterGenre] = useState<string | "all">("all");
   const [sortedIds, setSortedIds] = useState<string[]>([]);
 
   useEffect(() => {
@@ -154,11 +149,13 @@ function DashboardContent() {
     saveOrder(nextSorted);
   };
 
-  const grouped = GENRE_ORDER.map((genre) => {
+  const genreOrder = [...genres, ""];
+  const grouped = genreOrder.map((genre) => {
     const items = sortedIds
       .map((id) => companies.find((c) => c.id === id))
       .filter((c): c is Company => !!c && (c.genre ?? "") === genre);
-    return { genre, label: GENRE_LABEL[genre], items };
+    const label = genre === "" ? "未分類" : genre;
+    return { genre, label, items };
   }).filter((g) => g.items.length > 0 && (filterGenre === "all" || g.genre === filterGenre));
 
   return (
@@ -182,8 +179,8 @@ function DashboardContent() {
         </button>
       </div>
 
-      <div className="flex gap-2 mb-6">
-        {([["all", "全体"], ["SIer", "SIer"], ["エンタメ", "エンタメ"], ["", "未分類"]] as [Genre | "all", string][]).map(([val, label]) => {
+      <div className="flex flex-wrap gap-2 mb-6">
+        {([["all", "全体"], ...genres.map((g) => [g, g]), ["", "未分類"]] as [string, string][]).map(([val, label]) => {
           const count = val === "all" ? companies.length : companies.filter((c) => (c.genre ?? "") === val).length;
           return (
             <button

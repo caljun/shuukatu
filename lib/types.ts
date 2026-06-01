@@ -1,4 +1,4 @@
-export type Genre = "SIer" | "エンタメ" | "";
+export type Genre = string;
 export type CompanyColor = "white" | "blue" | "red" | "purple" | "black";
 
 export interface Company {
