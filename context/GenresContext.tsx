@@ -15,7 +15,6 @@ const GenresContext = createContext<GenresContextType | null>(null);
 
 export function GenresProvider({ children }: { children: ReactNode }) {
   const [genres, setGenres] = useState<string[]>(DEFAULT_GENRES);
-  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
@@ -24,7 +23,6 @@ export function GenresProvider({ children }: { children: ReactNode }) {
         setGenres(JSON.parse(stored));
       } catch {}
     }
-    setHydrated(true);
   }, []);
 
   const save = (next: string[]) => {
@@ -41,8 +39,6 @@ export function GenresProvider({ children }: { children: ReactNode }) {
   const deleteGenre = (name: string) => {
     save(genres.filter((g) => g !== name));
   };
-
-  if (!hydrated) return <>{children}</>;
 
   return (
     <GenresContext.Provider value={{ genres, addGenre, deleteGenre }}>
