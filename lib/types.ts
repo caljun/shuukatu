@@ -11,6 +11,7 @@ export interface Company {
   loginId: string;
   unread: number;
   color?: CompanyColor;
+  favorite?: boolean;
 }
 
 export interface CompanyEvent {

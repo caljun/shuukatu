@@ -23,6 +23,7 @@ interface CompaniesContextType {
   deleteCompany: (id: string) => Promise<void>;
   getCompany: (id: string) => Company | undefined;
   setCompanyColor: (id: string, color: CompanyColor) => Promise<void>;
+  setCompanyFavorite: (id: string, favorite: boolean) => Promise<void>;
 }
 
 const CompaniesContext = createContext<CompaniesContextType | null>(null);
@@ -64,9 +65,13 @@ export function CompaniesProvider({ children }: { children: ReactNode }) {
     await updateDoc(doc(db, "companies", id), { color });
   };
 
+  const setCompanyFavorite = async (id: string, favorite: boolean) => {
+    await updateDoc(doc(db, "companies", id), { favorite });
+  };
+
   return (
     <CompaniesContext.Provider
-      value={{ companies, loading, addCompany, updateCompany, deleteCompany, getCompany, setCompanyColor }}
+      value={{ companies, loading, addCompany, updateCompany, deleteCompany, getCompany, setCompanyColor, setCompanyFavorite }}
     >
       {children}
     </CompaniesContext.Provider>

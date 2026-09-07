@@ -74,7 +74,7 @@ interface Props {
 }
 
 export default function CompanyDetailModal({ companyId, onClose }: Props) {
-  const { getCompany, deleteCompany, setCompanyColor } = useCompanies();
+  const { getCompany, deleteCompany, setCompanyColor, setCompanyFavorite } = useCompanies();
   const { getEventsForCompany, addEvent, updateEvent, deleteEvent } = useEvents();
   const [editOpen, setEditOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -149,6 +149,20 @@ export default function CompanyDetailModal({ companyId, onClose }: Props) {
           <h2 className="text-xl font-bold text-slate-800 truncate">{company.name}</h2>
           <div className="flex items-center gap-2 shrink-0">
             <button
+              onClick={() => setCompanyFavorite(companyId, !company.favorite)}
+              aria-pressed={!!company.favorite}
+              className={`flex items-center gap-1.5 px-3 py-2 text-sm font-medium border rounded-xl transition-colors ${
+                company.favorite
+                  ? "text-amber-700 bg-amber-50 border-amber-300 hover:bg-amber-100"
+                  : "text-slate-600 border-slate-200 hover:bg-slate-50"
+              }`}
+            >
+              <svg width="15" height="15" viewBox="0 0 24 24" fill={company.favorite ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+              <span className="hidden sm:inline">{company.favorite ? "お気に入り済み" : "お気に入り"}</span>
+            </button>
+            <button
               onClick={() => setEditOpen(true)}
               className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors"
             >
@@ -156,7 +170,7 @@ export default function CompanyDetailModal({ companyId, onClose }: Props) {
                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
                 <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
               </svg>
-              編集
+              <span className="hidden sm:inline">編集</span>
             </button>
             <button
               onClick={handleDelete}
@@ -168,7 +182,7 @@ export default function CompanyDetailModal({ companyId, onClose }: Props) {
                 <path d="M10 11v6M14 11v6" />
                 <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
               </svg>
-              削除
+              <span className="hidden sm:inline">削除</span>
             </button>
             <button
               onClick={onClose}

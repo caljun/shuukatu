@@ -17,12 +17,13 @@ interface Resume {
   certifications: string;
   hobbies: string;
   selfPr: string;
+  gakuchika: string;
 }
 
 const DEFAULT: Resume = {
   name: "", birthdate: "", address: "", phone: "", email: "",
   university: "", faculty: "", grade: "", graduationYear: "",
-  certifications: "", hobbies: "", selfPr: "",
+  certifications: "", hobbies: "", selfPr: "", gakuchika: "",
 };
 
 const GRADE_OPTIONS = ["大学1年生", "大学2年生", "大学3年生", "大学4年生"];
@@ -75,6 +76,10 @@ export default function ResumeTab() {
 
   return (
     <div className="flex flex-col gap-5">
+      <div>
+        <h2 className="text-lg font-bold text-slate-800">履歴書</h2>
+        <p className="text-sm text-slate-400 mt-1">応募時に使う基本情報をまとめて管理できます</p>
+      </div>
       <Section title="基本情報">
         <div className="grid grid-cols-2 gap-4">
           <Field label="氏名">
@@ -128,6 +133,11 @@ export default function ResumeTab() {
       <Section title="自己PR">
         <textarea value={data.selfPr} onChange={(e) => handleChange("selfPr", e.target.value)} rows={6} placeholder="自己PRを入力…" className={`${inputClass} resize-none`} />
         <p className="text-xs text-slate-300 mt-2 text-right">{data.selfPr.length} 文字</p>
+      </Section>
+
+      <Section title="ガクチカ">
+        <textarea value={data.gakuchika} onChange={(e) => handleChange("gakuchika", e.target.value)} rows={6} placeholder="学生時代に力を入れたことを入力…" className={`${inputClass} resize-none`} />
+        <p className="text-xs text-slate-300 mt-2 text-right">{data.gakuchika.length} 文字</p>
       </Section>
 
       <div className="flex items-center justify-end gap-3 pt-2">

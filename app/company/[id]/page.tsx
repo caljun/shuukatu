@@ -64,7 +64,7 @@ export default function CompanyDetail() {
   const router = useRouter();
   const params = useParams();
   const id = params.id as string;
-  const { getCompany, deleteCompany } = useCompanies();
+  const { getCompany, deleteCompany, setCompanyFavorite } = useCompanies();
   const { getEventsForCompany, addEvent, updateEvent, deleteEvent } = useEvents();
   const [editOpen, setEditOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -136,6 +136,20 @@ export default function CompanyDetail() {
         <div className="flex items-start justify-between gap-3">
           <h1 className="text-xl md:text-3xl font-bold text-slate-800 leading-snug">{company.name}</h1>
           <div className="flex gap-2 shrink-0">
+            <button
+              onClick={() => setCompanyFavorite(id, !company.favorite)}
+              aria-pressed={!!company.favorite}
+              className={`flex items-center gap-1.5 px-3 py-2 text-sm font-medium border rounded-xl transition-colors ${
+                company.favorite
+                  ? "text-amber-700 bg-amber-50 border-amber-300 hover:bg-amber-100"
+                  : "text-slate-600 border-slate-200 hover:bg-slate-50"
+              }`}
+            >
+              <svg width="15" height="15" viewBox="0 0 24 24" fill={company.favorite ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+              <span className="hidden sm:inline">{company.favorite ? "お気に入り済み" : "お気に入り"}</span>
+            </button>
             <button
               onClick={() => setEditOpen(true)}
               className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors"
